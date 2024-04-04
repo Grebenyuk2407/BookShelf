@@ -28,50 +28,16 @@ import com.example.bookshelf.data.Book
 @Composable
 fun BooksGridScreen(
     books:List<Book>,
-    modifier: Modifier
+    modifier: Modifier,
+    onBookClicked :(Book) -> Unit
 ){
     LazyVerticalGrid(
         columns = GridCells.Adaptive(150.dp),
         contentPadding = PaddingValues(4.dp)
         ){
         itemsIndexed(books){_, book ->
-            BookCard(book = book, modifier)
+            BookCard(book = book, modifier, onBookClicked)
         }
     }
 }
 
-@Composable
-fun BookCard(
-    book:Book,
-    modifier: Modifier
-){
-    Card (
-        modifier = modifier
-            .padding(4.dp)
-            .fillMaxWidth()
-            .requiredHeight(296.dp),
-        elevation = 8.dp
-    ){
-        Column(horizontalAlignment = Alignment.CenterHorizontally){
-            book.title?.let { 
-                Text(
-                    text = it,
-                    textAlign = TextAlign.Center,
-                    modifier = modifier
-                        .padding(top = 4.dp, bottom = 8.dp)
-                )
-            }
-            AsyncImage(
-                modifier = modifier.fillMaxWidth(),
-                model = ImageRequest.Builder(context = LocalContext.current)
-                    .data(book.imageLink?.replace("http","https"))
-                    .crossfade(true)
-                    .build(),
-                error = painterResource(id = R.drawable.ic_book_96),
-                placeholder = painterResource(id = R.drawable.loading_img),
-                contentDescription = stringResource(id = R.string.content_description),
-                contentScale = ContentScale.Crop
-            )
-        }
-    }
-}

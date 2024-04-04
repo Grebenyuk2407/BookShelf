@@ -13,20 +13,36 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bookshelf.BooksViewModel
 import com.example.bookshelf.R
+import com.example.bookshelf.data.Book
+import com.example.bookshelf.ui.theme.MainAppBar
 
 @Composable
 fun BooksApp(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBookClicked :(Book) -> Unit
 ) {
     val booksViewModel: BooksViewModel =
         viewModel(factory = BooksViewModel.Factory)
+    val searchWidgetState = booksViewModel.searchWidgetState
+    val searchTextState = booksViewModel.searchTextState
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
-            TopAppBar (
-                title = {
-                    Text(text = stringResource(id = R.string.app_name))
+            MainAppBar(
+                searchWidgetState = searchWidgetState.value,
+                searchTextState = searchTextState.value,
+                onTextChange = {
+                               booksViewModel.updateSearchTextState(newValue = it)
+                },
+                onCloseClicked = {
+                                 booksViewModel.updateSearchWidgetState(newValue = BooksViewModel.SearchWidgetState.CLOSED)
+                },
+                onSearchClicked = {
+                    booksViewModel.getBooks(it)
+                },
+                onSearchTriggered = {
+                    booksViewModel.updateSearchWidgetState(BooksViewModel.SearchWidgetState.OPENED)
                 }
             )
         }
@@ -40,7 +56,8 @@ fun BooksApp(
             HomeScreen(
                 booksUiState = booksViewModel.booksUiState,
                 retryAction = { booksViewModel.getBooks() },
-                modifier = modifier
+                modifier = modifier,
+                onBookClicked
             )
         }
     }
