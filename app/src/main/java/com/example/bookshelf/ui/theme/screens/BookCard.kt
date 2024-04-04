@@ -1,5 +1,6 @@
 package com.example.bookshelf.ui.theme.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,15 +26,16 @@ fun BookCard(
     book: Book,
     modifier: Modifier,
     onBookClicked: (Book) -> Unit
-){
-    Card (
+) {
+    Card(
         modifier = modifier
             .padding(4.dp)
             .fillMaxWidth()
-            .requiredHeight(296.dp),
+            .requiredHeight(296.dp)
+            .clickable { onBookClicked(book) },
         elevation = 8.dp
-    ){
-        Column(horizontalAlignment = Alignment.CenterHorizontally){
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
             book.title?.let {
                 Text(
                     text = it,
@@ -45,7 +47,7 @@ fun BookCard(
             AsyncImage(
                 modifier = modifier.fillMaxWidth(),
                 model = ImageRequest.Builder(context = LocalContext.current)
-                    .data(book.imageLink?.replace("http","https"))
+                    .data(book.imageLink?.replace("http", "https"))
                     .crossfade(true)
                     .build(),
                 error = painterResource(id = R.drawable.ic_book_96),

@@ -3,7 +3,6 @@ package com.example.bookshelf.data
 import com.example.bookshelf.network.BookService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 
 interface AppContainer{
     val booksRepository :BooksRepository
